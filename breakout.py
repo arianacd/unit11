@@ -4,7 +4,6 @@ import brick
 
 pygame.init()
 
-
 def main():
     # Constants that will be used in the program
     APPLICATION_WIDTH = 400
