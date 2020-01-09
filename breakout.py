@@ -1,6 +1,7 @@
 import pygame, sys
 from pygame.locals import *
 import brick
+import paddle
 
 pygame.init()
 
@@ -32,7 +33,7 @@ def main():
     colors = [RED, ORANGE, YELLOW, GREEN, CYAN]
 
     main_surface = pygame.display.set_mode((APPLICATION_WIDTH, APPLICATION_HEIGHT), 0, 32)
-    main_surface.fill((255, 255, 255))
+    main_surface.fill(WHITE)
     # Step 1: Use loops to draw the rows of bricks. The top row of bricks should be 70 pixels away from the top of
     # the screen (BRICK_Y_OFFSET)
 
@@ -48,10 +49,19 @@ def main():
             x_pos = BRICK_SEP
 
 
+    for x in range():
 
 
+    my_paddle = paddle.Paddle(main_surface, BLACK, PADDLE_WIDTH, PADDLE_HEIGHT)
+
+    y_pos_paddle = APPLICATION_HEIGHT - PADDLE_Y_OFFSET
+    x_pos_paddle = 200
+    main_surface.blit(my_paddle.image, (x_pos_paddle, y_pos_paddle))
 
     while True:
+        main_surface.fill(WHITE)
+        my_paddle.move(pygame.mouse.get_pos())
+        main_surface.blit(my_paddle.image, (my_paddle.rect.x, y_pos_paddle))
         pygame.display.update()
         for event in pygame.event.get():
             if event == QUIT:
