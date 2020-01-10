@@ -2,6 +2,7 @@ import pygame, sys
 from pygame.locals import *
 import brick
 import paddle
+import ball
 
 pygame.init()
 
@@ -32,6 +33,10 @@ def main():
 
     colors = [RED, ORANGE, YELLOW, GREEN, CYAN]
 
+    bricks_group = pygame.sprite.Group()
+    paddle_group = pygame.sprite.Group()
+
+
     main_surface = pygame.display.set_mode((APPLICATION_WIDTH, APPLICATION_HEIGHT), 0, 32)
     main_surface.fill(WHITE)
     # Step 1: Use loops to draw the rows of bricks. The top row of bricks should be 70 pixels away from the top of
@@ -43,25 +48,35 @@ def main():
         for y in range(2):
             for x in range(BRICKS_PER_ROW):
                 my_brick = brick.Brick(BRICK_WIDTH, BRICK_HEIGHT, hue)
-                main_surface.blit(my_brick.image, (x_pos, y_pos))
+                my_brick.rect.x = x_pos
+                my_brick.rect.y = y_pos
+                bricks_group.add(my_brick)
+                main_surface.blit(my_brick.image, my_brick.rect)
                 x_pos += BRICK_WIDTH + BRICK_SEP
             y_pos += BRICK_HEIGHT + BRICK_SEP
             x_pos = BRICK_SEP
 
-
-    for x in range():
-
+    # for x in range():
 
     my_paddle = paddle.Paddle(main_surface, BLACK, PADDLE_WIDTH, PADDLE_HEIGHT)
-
     y_pos_paddle = APPLICATION_HEIGHT - PADDLE_Y_OFFSET
     x_pos_paddle = 200
     main_surface.blit(my_paddle.image, (x_pos_paddle, y_pos_paddle))
+    paddle_group.add(my_paddle)
+
+    my_ball = ball.Ball(BLACK, APPLICATION_WIDTH, APPLICATION_HEIGHT, RADIUS_OF_BALL)
+    my_ball.rect.x = APPLICATION_WIDTH/2
+    my_ball.rect.y = APPLICATION_HEIGHT/2
+    main_surface.blit(my_ball.image, my_ball.rect)
 
     while True:
         main_surface.fill(WHITE)
+        for a_brick in bricks_group:
+            main_surface.blit(a_brick.image, a_brick.rect)
         my_paddle.move(pygame.mouse.get_pos())
         main_surface.blit(my_paddle.image, (my_paddle.rect.x, y_pos_paddle))
+        my_ball.move()
+        main_surface.blit(my_ball.image, my_ball.rect)
         pygame.display.update()
         for event in pygame.event.get():
             if event == QUIT:
