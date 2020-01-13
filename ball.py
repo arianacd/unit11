@@ -22,8 +22,8 @@ class Ball(pygame.sprite.Sprite):
         pygame.draw.circle(self.image, (0, 0, 0), (5, 5), 5, 0)
 
         # Add a circle to represent the ball to the surface just created.
-        self.x_speed = 3
-        self.y_speed = 4
+        self.x_speed = 4
+        self.y_speed = 5
 
     def move(self):
         self.rect.x += self.x_speed
@@ -33,8 +33,12 @@ class Ball(pygame.sprite.Sprite):
         if self.rect.top < 0 or self.rect.bottom > self.window_height:
             self.y_speed = -self.y_speed
 
-    def collide(self, spriteGroup):
-        if pygame.sprite.spritecollide(self, spriteGroup, False):
-            self.speedy = -self.speedy
+    def collide(self, sprite_group):
+        if pygame.sprite.spritecollide(self, sprite_group, False):
+            self.y_speed = -self.y_speed
+
+    def collide_brick(self, sprite_group):
+        if pygame.sprite.spritecollide(self, sprite_group, True):
+            self.y_speed = -self.y_speed
 
 

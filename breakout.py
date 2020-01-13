@@ -59,24 +59,34 @@ def main():
     # for x in range():
 
     my_paddle = paddle.Paddle(main_surface, BLACK, PADDLE_WIDTH, PADDLE_HEIGHT)
-    y_pos_paddle = APPLICATION_HEIGHT - PADDLE_Y_OFFSET
-    x_pos_paddle = 200
-    main_surface.blit(my_paddle.image, (x_pos_paddle, y_pos_paddle))
     paddle_group.add(my_paddle)
+    my_paddle.rect.y = APPLICATION_HEIGHT - PADDLE_Y_OFFSET
+    main_surface.blit(my_paddle.image, my_paddle.rect)
 
     my_ball = ball.Ball(BLACK, APPLICATION_WIDTH, APPLICATION_HEIGHT, RADIUS_OF_BALL)
     my_ball.rect.x = APPLICATION_WIDTH/2
     my_ball.rect.y = APPLICATION_HEIGHT/2
     main_surface.blit(my_ball.image, my_ball.rect)
 
+    tries = 0
+
     while True:
         main_surface.fill(WHITE)
         for a_brick in bricks_group:
             main_surface.blit(a_brick.image, a_brick.rect)
         my_paddle.move(pygame.mouse.get_pos())
-        main_surface.blit(my_paddle.image, (my_paddle.rect.x, y_pos_paddle))
+        main_surface.blit(my_paddle.image, my_paddle.rect)
         my_ball.move()
+        my_ball.collide(paddle_group)
+        my_ball.collide_brick(bricks_group)
         main_surface.blit(my_ball.image, my_ball.rect)
+        if my_ball.rect.bottom >= APPLICATION_HEIGHT:
+            my_ball.rect.y = APPLICATION_HEIGHT / 2
+            tries += 1
+        if tries == 3:
+            break
+        if len(bricks_group) == 0:
+            break
         pygame.display.update()
         for event in pygame.event.get():
             if event == QUIT:
