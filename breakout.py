@@ -36,9 +36,10 @@ def main():
     bricks_group = pygame.sprite.Group()
     paddle_group = pygame.sprite.Group()
 
-
     main_surface = pygame.display.set_mode((APPLICATION_WIDTH, APPLICATION_HEIGHT), 0, 32)
-    main_surface.fill(WHITE)
+    bg = pygame.image.load("construction.jpeg")
+    main_surface.blit(bg, (0, 0))
+    # main_surface.fill(WHITE)
     # Step 1: Use loops to draw the rows of bricks. The top row of bricks should be 70 pixels away from the top of
     # the screen (BRICK_Y_OFFSET)
 
@@ -72,6 +73,7 @@ def main():
 
     while True:
         main_surface.fill(WHITE)
+        main_surface.blit(bg, (0, 0))
         for a_brick in bricks_group:
             main_surface.blit(a_brick.image, a_brick.rect)
         my_paddle.move(pygame.mouse.get_pos())

@@ -10,16 +10,20 @@ class Ball(pygame.sprite.Sprite):
         self.window_height = window_height
         self.radius = radius
 
+        self.sound = pygame.mixer.Sound('Beep+Censor.wav')
+
         # initialize sprite super class
 
         # finish setting the class variables to the parameters
 
         # Create a surface, get the rect coordinates, fill the surface with a white color (or whatever color the
         # background of your breakout game will be.
-        self.image = pygame.Surface((radius, radius))
-        self.image.fill((255, 255, 255))
+        # self.image = pygame.Surface((radius, radius))
+        # self.image.fill((255, 255, 255))
+        self.image = pygame.image.load("allison.png")
         self.rect = self.image.get_rect()
-        pygame.draw.circle(self.image, (0, 0, 0), (5, 5), 5, 0)
+        # pygame.draw.circle(self.image, (0, 0, 0), (5, 5), 5, 0)
+
 
         # Add a circle to represent the ball to the surface just created.
         self.x_speed = 4
@@ -39,6 +43,9 @@ class Ball(pygame.sprite.Sprite):
 
     def collide_brick(self, sprite_group):
         if pygame.sprite.spritecollide(self, sprite_group, True):
+            self.sound.play()
             self.y_speed = -self.y_speed
+
+
 
 
