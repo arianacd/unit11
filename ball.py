@@ -10,7 +10,7 @@ class Ball(pygame.sprite.Sprite):
         self.window_height = window_height
         self.radius = radius
 
-        self.sound = pygame.mixer.Sound('Beep+Censor.wav')
+        self.sound = pygame.mixer.Sound('Hammering_Soung.wav')
 
         # initialize sprite super class
 
@@ -23,7 +23,6 @@ class Ball(pygame.sprite.Sprite):
         self.image = pygame.image.load("allison.png")
         self.rect = self.image.get_rect()
         # pygame.draw.circle(self.image, (0, 0, 0), (5, 5), 5, 0)
-
 
         # Add a circle to represent the ball to the surface just created.
         self.x_speed = 4

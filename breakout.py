@@ -3,6 +3,7 @@ from pygame.locals import *
 import brick
 import paddle
 import ball
+import time
 
 pygame.init()
 
@@ -71,6 +72,7 @@ def main():
 
     tries = 0
 
+
     while True:
         main_surface.fill(WHITE)
         main_surface.blit(bg, (0, 0))
@@ -82,11 +84,17 @@ def main():
         my_ball.collide(paddle_group)
         my_ball.collide_brick(bricks_group)
         main_surface.blit(my_ball.image, my_ball.rect)
+        end_sound = pygame.mixer.Sound('maybe-next-time.wav')
         if my_ball.rect.bottom >= APPLICATION_HEIGHT:
+            end_sound.play()
             my_ball.rect.y = APPLICATION_HEIGHT / 2
             tries += 1
         if tries == 3:
-            break
+            main_surface.fill(BLACK)
+            font = pygame.font.SysFont('Comic Sana MS', 50)
+            label = font.render('GAME OVER', False, RED)
+            main_surface.blit(label, (100, 250))
+            # break
         if len(bricks_group) == 0:
             break
         pygame.display.update()
