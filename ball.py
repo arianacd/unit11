@@ -1,5 +1,5 @@
 import pygame
-
+# commented out code is there for later use
 
 class Ball(pygame.sprite.Sprite):
 
@@ -12,23 +12,20 @@ class Ball(pygame.sprite.Sprite):
 
         self.sound = pygame.mixer.Sound('Hammering_Soung.wav')
 
-        # initialize sprite super class
-
-        # finish setting the class variables to the parameters
-
-        # Create a surface, get the rect coordinates, fill the surface with a white color (or whatever color the
-        # background of your breakout game will be.
         # self.image = pygame.Surface((radius, radius))
         # self.image.fill((255, 255, 255))
         self.image = pygame.image.load("allison.png")
         self.rect = self.image.get_rect()
-        # pygame.draw.circle(self.image, (0, 0, 0), (5, 5), 5, 0)
 
         # Add a circle to represent the ball to the surface just created.
-        self.x_speed = 4
+        self.x_speed = 6
         self.y_speed = 5
 
     def move(self):
+        """
+        this function makes the ball move and bounce off walls
+        :return: nothing
+        """
         self.rect.x += self.x_speed
         self.rect.y += self.y_speed
         if self.rect.left < 0 or self.rect.right > self.window_width:
@@ -37,10 +34,20 @@ class Ball(pygame.sprite.Sprite):
             self.y_speed = -self.y_speed
 
     def collide(self, sprite_group):
+        """
+        this function makes it so the ball can bounce off another object and go in the other direction
+        :param sprite_group: the paddle
+        :return: nothing
+        """
         if pygame.sprite.spritecollide(self, sprite_group, False):
             self.y_speed = -self.y_speed
 
     def collide_brick(self, sprite_group):
+        """
+        this function allows the ball to collide and break bricks
+        :param sprite_group: the bricks
+        :return: nothing
+        """
         if pygame.sprite.spritecollide(self, sprite_group, True):
             self.sound.play()
             self.y_speed = -self.y_speed

@@ -1,11 +1,49 @@
+# by ariana daney
+# last modified january 17, 2020
+# breakout game
 import pygame, sys
 from pygame.locals import *
 import brick
 import paddle
 import ball
-import time
+# commented out code is there for later use
 
 pygame.init()
+
+win_sound = pygame.mixer.Sound('applause4.wav')
+
+
+def win_game(main_surface):
+    """
+    this function displays "winner!" when the player wins
+    :param main_surface: where the words are displayed
+    :return: nothing
+    """
+    main_surface.fill((255, 200, 200))
+    font = pygame.font.SysFont('Comic Sana MS', 100)
+    label = font.render('WINNER!', 1, (0, 0, 255))
+    main_surface.blit(label, (40, 250))
+    win_sound.play()
+    for event in pygame.event.get():
+        if event == QUIT:
+            pygame.quit()
+            sys.exit()
+
+
+def game_over(main_surface):
+    """
+    this function displays "game over" on the screen when the player looses
+    :param main_surface: the surface they words are projected on
+    :return: nothing
+    """
+    main_surface.fill((0, 0, 0))
+    font = pygame.font.SysFont('Comic Sana MS', 50)
+    label = font.render('GAME OVER', 1, (255, 0, 0))
+    main_surface.blit(label, (100, 250))
+    for event in pygame.event.get():
+        if event == QUIT:
+            pygame.quit()
+            sys.exit()
 
 
 def main():
@@ -34,16 +72,16 @@ def main():
 
     colors = [RED, ORANGE, YELLOW, GREEN, CYAN]
 
+    # creates a sprite fo the sprite groups so the bricks and paddle can collide with the ball
     bricks_group = pygame.sprite.Group()
     paddle_group = pygame.sprite.Group()
 
+    # creates a main surface with a picture as the background
     main_surface = pygame.display.set_mode((APPLICATION_WIDTH, APPLICATION_HEIGHT), 0, 32)
     bg = pygame.image.load("construction.jpeg")
     main_surface.blit(bg, (0, 0))
-    # main_surface.fill(WHITE)
-    # Step 1: Use loops to draw the rows of bricks. The top row of bricks should be 70 pixels away from the top of
-    # the screen (BRICK_Y_OFFSET)
 
+    # the following code displays the bricks on the screen
     x_pos = BRICK_SEP
     y_pos = BRICK_Y_OFFSET
     for hue in colors:
@@ -57,14 +95,12 @@ def main():
                 x_pos += BRICK_WIDTH + BRICK_SEP
             y_pos += BRICK_HEIGHT + BRICK_SEP
             x_pos = BRICK_SEP
-
-    # for x in range():
-
+    # displays the paddle
     my_paddle = paddle.Paddle(main_surface, BLACK, PADDLE_WIDTH, PADDLE_HEIGHT)
     paddle_group.add(my_paddle)
     my_paddle.rect.y = APPLICATION_HEIGHT - PADDLE_Y_OFFSET
     main_surface.blit(my_paddle.image, my_paddle.rect)
-
+    # displays the ball
     my_ball = ball.Ball(BLACK, APPLICATION_WIDTH, APPLICATION_HEIGHT, RADIUS_OF_BALL)
     my_ball.rect.x = APPLICATION_WIDTH/2
     my_ball.rect.y = APPLICATION_HEIGHT/2
@@ -72,10 +108,10 @@ def main():
 
     tries = 0
 
-
     while True:
         main_surface.fill(WHITE)
         main_surface.blit(bg, (0, 0))
+        # makes the paddle move with the mouse
         for a_brick in bricks_group:
             main_surface.blit(a_brick.image, a_brick.rect)
         my_paddle.move(pygame.mouse.get_pos())
@@ -85,18 +121,18 @@ def main():
         my_ball.collide_brick(bricks_group)
         main_surface.blit(my_ball.image, my_ball.rect)
         end_sound = pygame.mixer.Sound('maybe-next-time.wav')
+        # resets the ball if it goes off the screen
         if my_ball.rect.bottom >= APPLICATION_HEIGHT:
             end_sound.play()
             my_ball.rect.y = APPLICATION_HEIGHT / 2
             tries += 1
-        if tries == 3:
-            main_surface.fill(BLACK)
-            font = pygame.font.SysFont('Comic Sana MS', 50)
-            label = font.render('GAME OVER', False, RED)
-            main_surface.blit(label, (100, 250))
-            # break
+        # displays "game over" if the player looses. The >= makes the game over displays even when the ball
+        # keeps hitting the bottom of the screen
+        if tries >= 3:
+            game_over(main_surface)
+        # displays "winner!" when the player wins by breaking all the bricks
         if len(bricks_group) == 0:
-            break
+            win_game(main_surface)
         pygame.display.update()
         for event in pygame.event.get():
             if event == QUIT:
